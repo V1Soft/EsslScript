@@ -5,6 +5,6 @@ Todo:
 - [x] Establish base
 - [ ] Parse and evaluate mathmatical expressions
 - [ ] Implement Slices
-- [ ] Run files
-- [ ] Add shell
+- [x] Run files
+- [x] Add shell
 - [ ] 
