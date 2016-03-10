@@ -228,6 +228,7 @@ def execute(parsedScript='', preVars=[]):
 
             # if EXPRESSION DO:
             elif code[0] == 'if':
+
                 # if VALUE is VALUE2:
                 if code[2] == '==':
 
@@ -245,7 +246,7 @@ def execute(parsedScript='', preVars=[]):
                                             if variable.value == variable2.value:
 
                                                 # execute DO:
-                                                execute(parsedScript=[code[4]], preVars=variables)
+                                                execute(parsedScript=[code[4]])
                                             break
                                     break
 
@@ -256,7 +257,7 @@ def execute(parsedScript='', preVars=[]):
                                     if variable.value == code[3]:
 
                                         # execute DO:
-                                        execute(parsedScript=[code[4]], preVars=variables)
+                                        execute(parsedScript=[code[4]])
                                     break
 
                     # if neither VALUE nor VALUE2 is var:
@@ -266,7 +267,7 @@ def execute(parsedScript='', preVars=[]):
                         if code[1] == code[3]:
 
                             # execute DO:
-                            execute(parsedScript=[code[4]], preVars=variables)
+                            execute(parsedScript=[code[4]])
 
                 # if VALUE is not VALUE2:
                 elif code[2] == '!=':
@@ -285,7 +286,7 @@ def execute(parsedScript='', preVars=[]):
                                             if variable.value != variable2.value:
 
                                                 # execute DO:
-                                                execute(parsedScript=[code[4]], preVars=variables)
+                                                execute(parsedScript=[code[4]])
                                             break
                                     break
 
@@ -296,13 +297,13 @@ def execute(parsedScript='', preVars=[]):
                                     if variable.value != code[3]:
 
                                         # execute DO:
-                                        execute(parsedScript=[code[4]], preVars=variables)
+                                        execute(parsedScript=[code[4]])
                                     break
 
                     # if neither VALUE nor VALUE2 is var:
                     else:
                         if code[1] != code[3]:
-                            execute(parsedScript=[code[4]], preVars=variables)
+                            execute(parsedScript=[code[4]])
 
                 # if VALUE is less than VALUE2:
                 elif code[2] == '<':
@@ -321,7 +322,7 @@ def execute(parsedScript='', preVars=[]):
                                             if variable.value < variable2.value:
 
                                                 # execute DO:
-                                                execute(parsedScript=[code[4]], preVars=variables)
+                                                execute(parsedScript=[code[4]])
                                             break
                                     break
 
@@ -332,7 +333,7 @@ def execute(parsedScript='', preVars=[]):
                                     if variable.value < code[3]:
 
                                         # execute DO:
-                                        execute(parsedScript=[code[4]], preVars=variables)
+                                        execute(parsedScript=[code[4]])
                                     break
 
                     # if neither VALUE nor VALUE2 is var:
@@ -342,7 +343,7 @@ def execute(parsedScript='', preVars=[]):
                         if code[1] < code[3]:
 
                             # execute DO:
-                            execute(parsedScript=[code[4]], preVars=variables)
+                            execute(parsedScript=[code[4]])
 
                 # if VALUE is greater than VALUE2:
                 elif code[2] == '>':
@@ -361,7 +362,7 @@ def execute(parsedScript='', preVars=[]):
                                             if variable.value > variable2.value:
 
                                                 # execute DO:
-                                                execute(parsedScript=[code[4]], preVars=variables)
+                                                execute(parsedScript=[code[4]])
                                             break
                                     break
                                 else:
@@ -370,7 +371,7 @@ def execute(parsedScript='', preVars=[]):
                                     if variable.value > code[3]:
 
                                         # execute DO:
-                                        execute(parsedScript=[code[4]], preVars=variables)
+                                        execute(parsedScript=[code[4]])
                                     break
 
                     # if neither VALUE nor VALUE2 is var:
@@ -380,7 +381,7 @@ def execute(parsedScript='', preVars=[]):
                         if code[1] > code[3]:
 
                             # execute DO:
-                            execute(parsedScript=[code[4]], preVars=variables)
+                            execute(parsedScript=[code[4]])
 
                 # if VALUE is less than or equal to VALUE2:
                 elif code[2] == '<=':
@@ -399,7 +400,7 @@ def execute(parsedScript='', preVars=[]):
                                             if variable.value <= variable2.value:
 
                                                 # execute DO:
-                                                execute(parsedScript=[code[4]], preVars=variables)
+                                                execute(parsedScript=[code[4]])
                                             break
                                     break
 
@@ -410,7 +411,7 @@ def execute(parsedScript='', preVars=[]):
                                     if variable.value <= code[3]:
 
                                         # execute DO:
-                                        execute(parsedScript=[code[4]], preVars=variables)
+                                        execute(parsedScript=[code[4]])
                                     break
 
                     # if neither VALUE nor VALUE2 is var:
@@ -420,7 +421,7 @@ def execute(parsedScript='', preVars=[]):
                         if code[1] <= code[3]:
 
                             # execute DO:
-                            execute(parsedScript=[code[4]], preVars=variables)
+                            execute(parsedScript=[code[4]])
 
                 # if VALUE greater than or equal to VALUE2:
                 elif code[2] == '>=':
@@ -439,7 +440,7 @@ def execute(parsedScript='', preVars=[]):
                                             if variable.value >= variable2.value:
 
                                                 # execute DO:
-                                                execute(parsedScript=[code[4]], preVars=variables)
+                                                execute(parsedScript=[code[4]])
                                             break
                                     break
 
@@ -450,7 +451,7 @@ def execute(parsedScript='', preVars=[]):
                                     if variable.value >= code[3]:
 
                                         # execute DO:
-                                        execute(parsedScript=[code[4]], preVars=variables)
+                                        execute(parsedScript=[code[4]])
                                     break
 
                     # if neither VALUE nor VALUE2 is var:
@@ -460,7 +461,7 @@ def execute(parsedScript='', preVars=[]):
                         if code[1] >= code[3]:
 
                             # execute DO:
-                            execute(parsedScript=[code[4]], preVars=variables)
+                            execute(parsedScript=[code[4]])
 
                 # if VALUE is in VALUE2:
                 elif code[2] == ':':
@@ -479,7 +480,7 @@ def execute(parsedScript='', preVars=[]):
                                             if variable.value in variable2.value:
 
                                                 # execute DO:
-                                                execute(parsedScript=[code[4]], preVars=variables)
+                                                execute(parsedScript=[code[4]])
                                             break
                                     break
 
@@ -490,7 +491,7 @@ def execute(parsedScript='', preVars=[]):
                                     if variable.value in code[3]:
 
                                         # execute DO:
-                                        execute(parsedScript=[code[4]], preVars=variables)
+                                        execute(parsedScript=[code[4]])
                                     break
 
                     # if neither VALUE nor VALUE2 is var:
@@ -500,7 +501,7 @@ def execute(parsedScript='', preVars=[]):
                         if code[1] in code[3]:
 
                             # execute DO:
-                            execute(parsedScript=[code[4]], preVars=variables)
+                            execute(parsedScript=[code[4]])
 
             # goto TAG:
             elif code[0] == 'goto':
