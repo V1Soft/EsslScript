@@ -1,4 +1,5 @@
 import sys
+import os
 import readline
 
 # variable class:
@@ -11,6 +12,8 @@ class Variable(object):
         # variable value:
         self.value = None
 
+global variables
+variables = [Variable('stdin'), Variable('stdout'), Variable('stderr'), Variable('ret')]
 
 # parse function:
 def parse(source):
@@ -24,7 +27,7 @@ def parse(source):
     for char in source:
 
         # if CHAR is opening paranthesis:
-        if char == '(':
+        if char == '(' and not inQuote and not inString:
 
             # if WORD is not null:
             if word:
@@ -39,7 +42,7 @@ def parse(source):
             parsedScript.append([])
 
         # if CHAR is closing paranthesis:
-        elif char == ')':
+        elif char == ')' and not inQuote and not inString:
 
             # if WORD is not null:
             if word:
@@ -57,7 +60,7 @@ def parse(source):
             parsedScript[-1].append(temp)
 
         # if CHAR is semicolon:
-        elif char == ';':
+        elif char == ';' and not inQuote and not inString:
 
             # if WORD is not null:
             if word:
@@ -78,13 +81,13 @@ def parse(source):
             parsedScript.append([])
 
         # if CHAR is sharp:
-        elif char == '#':
+        elif char == '#' and not inQuote and not inString:
 
             # append '#':
             parsedScript[-1].append('#')
 
         # if CHAR is space, tab, or newline:
-        elif char in (' ', '\t', '\n'):
+        elif char in (' ', '\t', '\n') and not inQuote and not inString:
 
             # if WORD is not null:
             if word:
@@ -114,7 +117,7 @@ def parse(source):
             word += char
 
     # if CHAR is not space, tab, or newline:
-    if char not in (' ', '\t', '\n'):
+    if char not in (' ', '\t', '\n') and not inQuote and not inString:
 
         # set PREVCHAR to CHAR
         prevChar = char
@@ -133,7 +136,7 @@ def parse(source):
 
 def execute(parsedScript='', preVars=[]):
     evaluatedScript = parsedScript
-    variables = [Variable('stdin'), Variable('stdout'), Variable('stderr'), Variable('ret')]
+    global variables
 
     # append PREVAR elements to VARIABLES:
     for preVar in preVars:
@@ -149,6 +152,7 @@ def execute(parsedScript='', preVars=[]):
                 for variable in variables:
                     if variable.key == 'stdin':
                         variable.value = input()
+                        break
 
             # output VALUE,
             # output STREAM VALUE:
@@ -195,7 +199,7 @@ def execute(parsedScript='', preVars=[]):
                         variables.append(var)
 
                     # if VALUE is INPUT:
-                    elif code[2] == 'IN':
+                    elif code[2] == 'in':
                         for variable in variables:
                             if variable.key == code[1][1:]:
 
@@ -536,20 +540,70 @@ args = []
 i = 1
 
 # parse arguments and pass to EXECUTE function:
-for arg in sys.argv[2:]:
+for arg in sys.argv[3:]:
     variable = Variable(str(i))
     variable.value = arg
     args.append(variable)
     i += 1
 
 # if argument count is greater than 1:
-if len(sys.argv) > 1:
+if len(sys.argv) > 2:
 
-    # execute parsed 2nd argument:
-    execute(parse(sys.argv[1]), args)
+    # if 2nd argument is 'run':
+    if sys.argv[1] == 'run':
+
+        # if ESSLFILE should be read from STDIN:
+        if sys.argv[2][0] == '-':
+
+            # parse and execute 3rd argument:
+            execute(parse(sys.argv[2][1:]), args)
+
+        # if ESSLFILE should not be read from STDIN:
+        else:
+
+            # set ESSLFILE to file given in 3rd argument
+            esslFile = open(sys.argv[2], 'r+')
+
+            # parse and execute ESSLFILE:
+            execute(parse(esslFile.read()), args)
+
+    # if 2nd argument is not a recognized action:
+    else:
+
+        # print error:
+        print('Action ' + sys.argv[1] + ' not found.')
 
 # if argument cound is 1 or less:
 else:
 
-    # print error:
-    print('Invalid number of arguments.')
+    # if 2nd argument is 
+    if sys.argv[1] == 'shell':
+        while True:
+            try:
+                command = input('\n: ')
+
+                # if INPUT is essl command:
+                if command.startswith('in') or command.startswith('out') or command.startswith('if') or command.startswith('goto'):
+
+                    # parse and execute INPUT:
+                    execute(parse(command + ';'))
+
+                # if INPUT is exit:
+                elif command == 'exit':
+
+                    # exit shell:
+                    sys.exit(1)
+
+                # if INPUT is not essl command:
+                else:
+
+                    # execute INPUT as system command:
+                    os.system(command)
+            except KeyboardInterrupt:
+                sys.exit(130)
+
+    # if 2nd argument is not a recognized action:
+    else:
+
+        # print error:
+        print('Invalid number of arguments.')
