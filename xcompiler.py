@@ -1,5 +1,6 @@
 import sys
 import os
+import inspect
 import readline
 
 # variable class:
@@ -536,6 +537,11 @@ def execute(parsedScript='', preVars=[]):
                             variable.value = code[1]
         except KeyboardInterrupt:
             exit(130)
+def getRet():
+    global variables
+    for variable in variables:
+        if variable.key == 'ret':
+            return variable.value
 
 args = []
 i = 1
@@ -579,18 +585,32 @@ else:
 
     # if 2nd argument is 
     if sys.argv[1] == 'shell':
+        for variable in variables:
+            if variable.key == 'ret':
+                variable.value = 0
+                break
         while True:
             try:
-                command = input('\n: ')
 
+                # set PWD to current directory:
+                pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+                command = input('\n[' + str(getRet()) + '] '+ str(pwd) + ' : ')
                 # if INPUT is essl command:
-                if command.startswith('in') or command.startswith('out') or command.startswith('if') or command.startswith('goto'):
+                if parse(command + ';')[0][0] in ('in', 'out', 'if', 'goto', 'ret'):
 
                     # parse and execute INPUT:
                     execute(parse(command + ';'))
 
-                # if INPUT is exit:
-                elif command == 'exit':
+                # if input is 'cd':
+                elif parse(command + ';')[0][0] == 'cd':
+                    os.chdir(parse(command + ';')[0][1])
+
+                # if INPUT is help:
+                elif parse(command + ';')[0][0] == 'help':
+                    print('\nin -- get user input and set to %stdin\nout <value> OR out <stream> <value> -- print to stdout or print to stream\nif <expression> <do> -- test expression and if true, execute following commands\ngoto <location> -- go to designated tag in script\nret <value> -- set return value\n')
+
+                # if INPUT is 'exit':
+                elif parse(command + ';')[0][0] == 'exit':
 
                     # exit shell:
                     sys.exit(1)
@@ -601,7 +621,11 @@ else:
                     # execute INPUT as system command:
                     os.system(command)
             except KeyboardInterrupt:
-                sys.exit(130)
+
+                # return Keyboard Interrupt code:
+                for variable in variables:
+                    if variable.key == 'ret':
+                        variable.value = 130
 
     # if 2nd argument is not a recognized action:
     else:
