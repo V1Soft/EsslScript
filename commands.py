@@ -11,7 +11,7 @@ class Variable(object):
         # variable value:
         self.value = None
 
-variables = [Variable('stdin'), Variable('stdin'), Variable('stderr'), Variable('ret')]
+variables = [Variable('stdin'), Variable('stdin'), Variable('stderr'), Variable('stdret'), Variable('ret')]
 
 def getVar(var):
     keys = []
@@ -314,6 +314,9 @@ def gotoCommand(script=''):
         # increase line number by 1:
         line += 1
         #evaluatedScript.remove(code)
+
+def exprCommand(value=''):
+    getVar('ret').value = eval(value)
 
 def retCommand(value=''):
     try:

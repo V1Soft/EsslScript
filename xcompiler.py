@@ -70,11 +70,11 @@ def parse(source):
             # append list:
             parsedScript.append([])
 
-        # if CHAR is sharp:
-        elif char == '#' and not inQuote and not inString:
+        # if CHAR is sharp, plus, minus, asterisk, forward slash, or modulus:
+        elif char in ('#', '+', '-', '*', '/', '%') and not inQuote and not inString:
 
             # append '#':
-            parsedScript[-1].append('#')
+            parsedScript[-1].append(char)
 
         # if CHAR is space, tab, or newline:
         elif char in (' ', '\t', '\n') and not inQuote and not inString:
@@ -241,7 +241,7 @@ else:
     if sys.argv[1] == 'shell':
 
         # set ret to 0:
-        commands.getVar('ret').value = 0
+        commands.getVar('stdret').value = 0
         while True:
             try:
 
@@ -249,7 +249,7 @@ else:
                 pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
                 # set COMMAND to INPUT:
-                command = input('\n[' + str(commands.getVar('ret').value) + '] '+ str(pwd) + ' : ')
+                command = input('\n[' + str(commands.getVar('stdret').value) + '] '+ str(pwd) + ' : ')
 
                 # set ESSLCOMMAND to parsed COMMAND:
                 esslCommand = parse(command + ';')[0]
@@ -268,18 +268,18 @@ else:
                         os.chdir(esslCommand[1])
 
                         # return 0:
-                        commands.getVar('ret').value = 0
+                        commands.getVar('stdret').value = 0
 
                     # print error:
                     else:
                         print('Incorrect number of arguments for command \'cd\'.')
-                        commands.getVar('ret').value = 1
+                        commands.getVar('stdret').value = 1
 
                 # if INPUT is 'help':
                 elif esslCommand[0] == 'help':
                     print('\nin -- get user input and set to %stdin\nout <value> OR out <stream> <value> -- print to stdout or print to stream\nif <expression> <do> -- test expression and if true, execute following commands\ngoto <location> -- go to designated tag in script\nret <value> -- set return value\n')
                     # return 0:
-                    commands.getVar('ret').value = 0
+                    commands.getVar('stdret').value = 0
 
                 # if INPUT is 'exit':
                 elif esslCommand[0] == 'exit':
@@ -295,7 +295,7 @@ else:
             except KeyboardInterrupt:
 
                 # return Keyboard Interrupt code:
-                commands.getVar('ret').value = 130
+                commands.getVar('stdret').value = 130
 
     # if 2nd argument is not a recognized action:
     else:
