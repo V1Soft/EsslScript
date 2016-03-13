@@ -3,7 +3,7 @@
 Todo:
 <br>
 - [x] Establish base
-- [x] Parse and evaluate mathmatical expressions -- CURRENT FIX IS TEMPORARY
+- [x] Parse and evaluate mathmatical expressions
 - [ ] Implement Slices
 - [x] Run files
 - [x] Add shell
